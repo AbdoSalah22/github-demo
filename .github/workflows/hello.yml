@@ -1,6 +1,12 @@
 name: Hello CI
 
-on: [push]
+on:
+  push:
+    branches: [ dev, dev2 ] # Triggers when code is pushed to the 'dev' branch
+  pull_request:
+    branches: [ main ] # Triggers when a PR is opened targeting 'main'
+  workflow_dispatch:
+
 
 jobs:
  say_hello:
