@@ -1,16 +1,23 @@
-name: Hello CI
+name: Action Basics Demo
 
-on:
-  push:
-    branches: [ dev, dev2 ] # Triggers when code is pushed to the 'dev' branch
-  pull_request:
-    branches: [ main ] # Triggers when a PR is opened targeting 'main'
-  workflow_dispatch:
-
+on: [push]
 
 jobs:
- say_hello:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Print Hello
-       run: echo "Hello from GitHub Actions!"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo String
+        run: echo "Welcome to GitHub Actions!"
+
+      - name: Use a Marketplace Action
+        # A pre-built public action that prints a greeting
+        uses: actions/hello-world-javascript-action@v1
+        with:
+          who-to-greet: "Agile Student" # Input passed to the action
+
+      - name: Run a Multi-line Script
+        run: |
+          echo "---"
+          echo "This is a multi-line shell script."
+          echo "The current runner OS is: $(uname -a)"
+          echo "---"
