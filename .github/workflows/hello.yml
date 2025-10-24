@@ -9,15 +9,15 @@ jobs:
       - name: Echo String
         run: echo "Welcome to GitHub Actions!"
 
-      - name: Use a Marketplace Action
-        # A pre-built public action that prints a greeting
-        uses: actions/hello-world-javascript-action@v1
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          who-to-greet: "Agile Student" # Input passed to the action
+          python-version: '3.10'  # Input passed to the action
 
-      - name: Run a Multi-line Script
+      - name: Run Python Commands
         run: |
           echo "---"
-          echo "This is a multi-line shell script."
-          echo "The current runner OS is: $(uname -a)"
+          python --version
+          python -c "print('Hello from Python in GitHub Actions!')"
+          python -c "for i in range(3): print(f'Counting {i+1}')"
           echo "---"
