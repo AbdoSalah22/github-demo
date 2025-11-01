@@ -1,10 +1,6 @@
 name: Advanced CI Pipeline
 
-on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 # Global environment variable (visible to all jobs)
 env:
@@ -12,7 +8,7 @@ env:
 
 jobs:
   # ==========================================
-  # 1️⃣ Build & Test Job (Matrix)
+  # Build & Test Job (Matrix)
   # ==========================================
   build_and_test:
     name: Build and Test on ${{ matrix.os }}
@@ -53,7 +49,7 @@ jobs:
           path: test_logs/
 
   # ==========================================
-  # 2️⃣ Combine Results Job (Depends on Build)
+  # Combine Results Job (Depends on Build)
   # ==========================================
   combine_results:
     name: Combine Test Results
@@ -78,7 +74,7 @@ jobs:
           path: combined_results.txt
 
   # ==========================================
-  # 3️⃣ Deploy Job (Conditional + Secrets)
+  # Deploy Job (Conditional + Secrets)
   # ==========================================
   deploy:
     name: Deploy (Main Branch Only)
