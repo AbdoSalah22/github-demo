@@ -23,5 +23,5 @@ jobs:
       - name: Upload test report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-report
+          name: pytest-report_${{ matrix.os }}
           path: pytest-report.xml
