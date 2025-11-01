@@ -103,4 +103,4 @@ jobs:
           echo "RELEASE_TAG=v1.${{ github.run_number }}" >> $GITHUB_ENV
 
       - name: Use dynamic variable
-        run: echo "Release Tag set to: $RELEASE_TAG"
+        run: echo "Release Tag set to $RELEASE_TAG"
