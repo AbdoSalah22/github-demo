@@ -1,106 +1,106 @@
-# name: Advanced CI Pipeline
+name: Advanced CI Pipeline
 
-# on: [push, pull_request]
+on: [push, pull_request]
 
-# # Global environment variable (visible to all jobs)
-# env:
-#   PROJECT_NAME: GitHub Actions Demo
+# Global environment variable (visible to all jobs)
+env:
+  PROJECT_NAME: GitHub Actions Demo
 
-# jobs:
-#   # ==========================================
-#   # Build & Test Job (Matrix)
-#   # ==========================================
-#   build_and_test:
-#     name: Build and Test on ${{ matrix.os }}
-#     runs-on: ${{ matrix.os }}
-#     strategy:
-#       matrix:
-#         os: [ubuntu-latest, windows-latest]
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+jobs:
+  # ==========================================
+  # Build & Test Job (Matrix)
+  # ==========================================
+  build_and_test:
+    name: Build and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Setup Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-#       - name: Install dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install pytest
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
 
-#       - name: Run tests with pytest
-#         run: pytest -v
-#         env:
-#           TEST_ENV: matrix-run
-#           SECRET_TOKEN: ${{ secrets.MY_SECRET_TOKEN }}
+      - name: Run tests with pytest
+        run: pytest -v
+        env:
+          TEST_ENV: matrix-run
+          SECRET_TOKEN: ${{ secrets.MY_SECRET_TOKEN }}
 
-#       - name: Save test results
-#         run: |
-#           mkdir -p test_logs
-#           echo "OS: ${{ matrix.os }}" > test_logs/info.txt
-#           echo "Tests executed successfully." >> test_logs/info.txt
+      - name: Save test results
+        run: |
+          mkdir -p test_logs
+          echo "OS: ${{ matrix.os }}" > test_logs/info.txt
+          echo "Tests executed successfully." >> test_logs/info.txt
 
-#       - name: Upload Test Logs
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: test_logs_${{ matrix.os }}
-#           path: test_logs/
+      - name: Upload Test Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_logs_${{ matrix.os }}
+          path: test_logs/
 
-#   # ==========================================
-#   # Combine Results Job (Depends on Build)
-#   # ==========================================
-#   combine_results:
-#     name: Combine Test Results
-#     needs: build_and_test
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Download all test logs
-#         uses: actions/download-artifact@v4
-#         with:
-#           path: all_logs
+  # ==========================================
+  # Combine Results Job (Depends on Build)
+  # ==========================================
+  combine_results:
+    name: Combine Test Results
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all test logs
+        uses: actions/download-artifact@v4
+        with:
+          path: all_logs
 
-#       - name: Display combined logs
-#         run: |
-#           echo "Merging all logs from different OS builds:"
-#           ls all_logs
-#           cat all_logs/*/info.txt > combined_results.txt
+      - name: Display combined logs
+        run: |
+          echo "Merging all logs from different OS builds:"
+          ls all_logs
+          cat all_logs/*/info.txt > combined_results.txt
 
-#       - name: Upload Combined Results
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: combined_results
-#           path: combined_results.txt
+      - name: Upload Combined Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined_results
+          path: combined_results.txt
 
-#   # ==========================================
-#   # Deploy Job (Conditional + Secrets)
-#   # ==========================================
-#   deploy:
-#     name: Deploy (Main Branch Only)
-#     needs: combine_results
-#     runs-on: ubuntu-latest
-#     if: github.ref == 'refs/heads/main' && success()
-#     env:
-#       DEPLOY_STAGE: production
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+  # ==========================================
+  # Deploy Job (Conditional + Secrets)
+  # ==========================================
+  deploy:
+    name: Deploy (Main Branch Only)
+    needs: combine_results
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && success()
+    env:
+      DEPLOY_STAGE: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Download results artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: combined_results
+      - name: Download results artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: combined_results
 
-#       - name: Print deployment info
-#         run: |
-#           echo "Deploying $PROJECT_NAME to $DEPLOY_STAGE environment."
-#           echo "Using secret key: ${{ secrets.DEPLOY_API_KEY }}"
-#           echo "Commit SHA: $GITHUB_SHA"
+      - name: Print deployment info
+        run: |
+          echo "Deploying $PROJECT_NAME to $DEPLOY_STAGE environment."
+          echo "Using secret key: ${{ secrets.DEPLOY_API_KEY }}"
+          echo "Commit SHA: $GITHUB_SHA"
 
-#       - name: Export dynamic variable
-#         run: |
-#           echo "RELEASE_TAG=v1.${{ github.run_number }}" >> $GITHUB_ENV
+      - name: Export dynamic variable
+        run: |
+          echo "RELEASE_TAG=v1.${{ github.run_number }}" >> $GITHUB_ENV
 
-#       - name: Use dynamic variable
-#         run: echo "Release Tag set to $RELEASE_TAG"
+      - name: Use dynamic variable
+        run: echo "Release Tag set to $RELEASE_TAG"
