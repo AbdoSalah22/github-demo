@@ -66,7 +66,7 @@ h1 {
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .command-card:hover {
@@ -274,4 +274,5 @@ button:disabled {
     h1 {
         font-size: 2rem;
     }
+
 }
