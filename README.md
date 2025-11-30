@@ -2,6 +2,8 @@
 
 A tiny demo repository for a static web page used in class exercises.
 
+(Lab9)
+
 ## Contents
 
 - `index.html` — the demo HTML page
@@ -15,3 +17,4 @@ Open `index.html` directly in your browser (double-click the file) for a quick p
 ## Jira
 integration
 8:00 am lab
+
