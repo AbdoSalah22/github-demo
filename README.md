@@ -1,4 +1,4 @@
-﻿# GitHub Demo
+﻿# GitHub Demo - Ramy was here too!
 
 A tiny demo repository for a static web page used in class exercises.
 
