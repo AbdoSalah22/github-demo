@@ -18,3 +18,6 @@ integration
 10:00 am lab
 12:30 pm lab
 
+# Contributors 2026
+Ahmed Nasri
+
